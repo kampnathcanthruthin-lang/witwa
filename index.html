@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Material Selector | Portfolio Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #131c31;
+            --accent-gold: #d4af37;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #1f293d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #1a253f;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .result-section {
+            margin-top: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+        }
+
+        .grid-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background-color: #1a253f;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-gold);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .description {
+            line-height: 1.6;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Smart Material Selector</h1>
+            <p>ระบบจำลองการคัดเลือกวัสดุวิศวกรรมตามลักษณะการใช้งาน (Material Selection Matrix)</p>
+        </header>
+
+        <div class="card">
+            <div class="form-group">
+                <label for="applicationSelect">เลือกประเภทการใช้งาน (Application Requirement):</label>
+                <select id="applicationSelect" onchange="updateMaterial()">
+                    <option value="drone">โครงสร้างโดรน / อากาศยานไร้คนขับ (น้ำหนักเบาและแข็งแรงสูง)</option>
+                    <option value="heat">ชิ้นส่วนเตาเผา / อุตสาหกรรมความร้อนสูง (ทนความร้อนเยี่ยม)</option>
+                    <option value="corrosion">โครงสร้างใกล้ทะเล / ท่อส่งสารเคมี (ทนการกัดกร่อนสูง)</option>
+                </select>
+            </div>
+
+            <div class="result-section">
+                <div class="result-title" id="matName">คาร์บอนไฟเบอร์คอมโพสิต (Carbon Fiber Composite)</div>
+                
+                <div class="grid-stats">
+                    <div class="stat-box">
+                        <div class="stat-label">ความหนาแน่น (Density)</div>
+                        <div class="stat-value" id="matDensity">1.6 g/cm³</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">ความต้านทานแรงดึง (Tensile Strength)</div>
+                        <div class="stat-value" id="matStrength">1,600 MPa</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">จุดเด่นสำคัญ (Key Property)</div>
+                        <div class="stat-value" id="matFeature">High Strength-to-Weight</div>
+                    </div>
+                </div>
+
+                <p class="description" id="matDesc">
+                    วัสดุคอมโพสิตเสริมแรงด้วยเส้นใยคาร์บอน มีอัตราส่วนความแข็งแรงต่อน้ำหนักสูงมาก เหมาะสำหรับงานโครงสร้างที่ต้องการลดน้ำหนักเพื่อเพิ่มประสิทธิภาพการทรงตัวและการใช้พลังงาน
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            Portfolio Project — นายกัมปนาท จันทรุทิน | คณะวิศวกรรมวัสดุ
+        </footer>
+    </div>
+
+    <script>
+        // ฐานข้อมูลวัสดุจำลองสำหรับเชื่อมโยงในระบบ
+        const database = {
+            drone: {
+                name: "คาร์บอนไฟเบอร์คอมโพสิต (Carbon Fiber Reinforced Polymer)",
+                density: "1.6 g/cm³",
+                strength: "1,600 MPa",
+                feature: "High Strength-to-Weight",
+                desc: "วัสดุคอมโพสิตที่มีน้ำหนักเบาเป็นพิเศษแต่มีความทนทานต่อแรงดึงสูงมาก ช่วยลดน้ำหนักรวมของโดรนและยืดระยะเวลาการบินให้ยาวนานขึ้น"
+            },
+            heat: {
+                name: "อลูมินาเซรามิกส์ (Alumina Ceramics - Al2O3)",
+                density: "3.9 g/cm³",
+                strength: "350 MPa (Compressive)",
+                feature: "High Thermal Resistance",
+                desc: "เซรามิกเชิงวิศวกรรมที่ทนทานต่ออุณหภูมิสูงและการกัดกร่อนจากสารเคมีได้ดีเยี่ยม คงสภาพโครงสร้างได้แม้ในสภาพแวดล้อมความร้อนสูง"
+            },
+            corrosion: {
+                name: "สเตนเลสเกรดมารีน (Stainless Steel 316L)",
+                density: "8.0 g/cm³",
+                strength: "485 MPa",
+                feature: "Superior Corrosion Resistance",
+                desc: "โลหะผสมที่มีส่วนผสมของโครเมียม นิกเกิล และโมลิบดีนัม ช่วยสร้างฟิล์มป้องกันการกัดกร่อนจากคลอไรด์และน้ำทะเลได้อย่างมีประสิทธิภาพ"
+            }
+        };
+
+        function updateMaterial() {
+            const select = document.getElementById('applicationSelect');
+            const selectedKey = select.value;
+            const data = database[selectedKey];
+
+            document.getElementById('matName').innerText = data.name;
+            document.getElementById('matDensity').innerText = data.density;
+            document.getElementById('matStrength').innerText = data.strength;
+            document.getElementById('matFeature').innerText = data.feature;
+            document.getElementById('matDesc').innerText = data.desc;
+        }
+    </script>
+</body>
+</html>
