@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Material Selector | Portfolio Project</title>
+    <title>Smart Material Recommender | Portfolio Project</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -34,12 +34,12 @@
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 850px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         header h1 {
@@ -50,7 +50,7 @@
 
         header p {
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         .card {
@@ -73,8 +73,13 @@
             color: var(--text-main);
         }
 
-        select {
-            width: 100%;
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
             padding: 12px 16px;
             background-color: #1a253f;
             border: 1px solid var(--border-color);
@@ -85,25 +90,74 @@
             transition: border-color 0.3s;
         }
 
-        select:focus {
+        input[type="text"]:focus {
             border-color: var(--accent-gold);
         }
 
+        button {
+            padding: 12px 24px;
+            background-color: var(--accent-gold);
+            color: #0b0f19;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background-color: #1a253f;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            border-color: var(--accent-gold);
+            color: var(--text-main);
+        }
+
         .result-section {
-            margin-top: 20px;
+            margin-top: 25px;
             border-top: 1px solid var(--border-color);
-            padding-top: 20px;
+            padding-top: 25px;
+        }
+
+        .result-badge {
+            display: inline-block;
+            background-color: rgba(212, 175, 55, 0.15);
+            color: var(--accent-gold);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 10px;
         }
 
         .result-title {
-            font-size: 1.3rem;
-            color: var(--accent-gold);
+            font-size: 1.4rem;
+            color: var(--text-main);
             margin-bottom: 15px;
         }
 
         .grid-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -121,15 +175,20 @@
         }
 
         .stat-value {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             margin-top: 5px;
+            color: var(--accent-gold);
         }
 
         .description {
             line-height: 1.6;
             color: var(--text-muted);
             font-size: 0.95rem;
+            background: rgba(26, 37, 63, 0.4);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px dashed var(--border-color);
         }
 
         footer {
@@ -145,40 +204,48 @@
     <div class="container">
         <header>
             <h1>Smart Material Selector</h1>
-            <p>ระบบจำลองการคัดเลือกวัสดุวิศวกรรมตามลักษณะการใช้งาน (Material Selection Matrix)</p>
+            <p>ระบบผู้ช่วยวิเคราะห์และแนะนำวัสดุวิศวกรรมตามชิ้นงานที่ต้องการสร้าง</p>
         </header>
 
         <div class="card">
             <div class="form-group">
-                <label for="applicationSelect">เลือกประเภทการใช้งาน (Application Requirement):</label>
-                <select id="applicationSelect" onchange="updateMaterial()">
-                    <option value="drone">โครงสร้างโดรน / อากาศยานไร้คนขับ (น้ำหนักเบาและแข็งแรงสูง)</option>
-                    <option value="heat">ชิ้นส่วนเตาเผา / อุตสาหกรรมความร้อนสูง (ทนความร้อนเยี่ยม)</option>
-                    <option value="corrosion">โครงสร้างใกล้ทะเล / ท่อส่งสารเคมี (ทนการกัดกร่อนสูง)</option>
-                </select>
+                <label for="itemInput">ระบุสิ่งของหรือชิ้นงานที่คุณต้องการสร้าง:</label>
+                <div class="input-row">
+                    <input type="text" id="itemInput" placeholder="เช่น แก้วน้ำ, โครงโดรน, ใบพัดเรือ, เคสโทรศัพท์..." onkeypress="handleKeyPress(event)">
+                    <button onclick="recommendMaterial()">วิเคราะห์วัสดุ</button>
+                </div>
+                <div class="suggestions">
+                    <span style="color: var(--text-muted); font-size: 0.85rem; align-self: center;">ตัวอย่างลองค้นหา:</span>
+                    <span class="tag" onclick="quickSearch('แก้วน้ำ')">แก้วน้ำ</span>
+                    <span class="tag" onclick="quickSearch('โดรน')">โดรน</span>
+                    <span class="tag" onclick="quickSearch('ท่อส่งน้ำ')">ท่อส่งน้ำ</span>
+                    <span class="tag" onclick="quickSearch('เครื่องยนต์')">เครื่องยนต์</span>
+                    <span class="tag" onclick="quickSearch('สมาร์ตโฟน')">สมาร์ตโฟน</span>
+                </div>
             </div>
 
-            <div class="result-section">
-                <div class="result-title" id="matName">คาร์บอนไฟเบอร์คอมโพสิต (Carbon Fiber Composite)</div>
+            <div class="result-section" id="resultCard">
+                <div class="result-badge" id="matCategory">หมวดหมู่: พอลิเมอร์ (Polymers)</div>
+                <div class="result-title" id="matName">โพลีโพรพีลีน (PP) / แก้วพลาสติกเกรดอาหาร</div>
                 
                 <div class="grid-stats">
                     <div class="stat-box">
                         <div class="stat-label">ความหนาแน่น (Density)</div>
-                        <div class="stat-value" id="matDensity">1.6 g/cm³</div>
+                        <div class="stat-value" id="matDensity">0.90 g/cm³ (น้ำหนักเบา)</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">ความต้านทานแรงดึง (Tensile Strength)</div>
-                        <div class="stat-value" id="matStrength">1,600 MPa</div>
+                        <div class="stat-label">สมบัติเด่น (Key Property)</div>
+                        <div class="stat-value" id="matFeature">Food Safe & Durable</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-label">จุดเด่นสำคัญ (Key Property)</div>
-                        <div class="stat-value" id="matFeature">High Strength-to-Weight</div>
+                        <div class="stat-label">กระบวนการขึ้นรูป (Processing)</div>
+                        <div class="stat-value" id="matProcess">Injection Molding</div>
                     </div>
                 </div>
 
-                <p class="description" id="matDesc">
-                    วัสดุคอมโพสิตเสริมแรงด้วยเส้นใยคาร์บอน มีอัตราส่วนความแข็งแรงต่อน้ำหนักสูงมาก เหมาะสำหรับงานโครงสร้างที่ต้องการลดน้ำหนักเพื่อเพิ่มประสิทธิภาพการทรงตัวและการใช้พลังงาน
-                </p>
+                <div class="description" id="matDesc">
+                    <strong>คำแนะนำจากวิศวกรรมวัสดุ:</strong> เหมาะสำหรับทำแก้วน้ำเนื่องจากทนต่อสารเคมี ทนความร้อนระดับปานกลาง ปลอดภัยต่อการบรรจุอาหารและเครื่องดื่ม และขึ้นรูปได้ง่ายด้วยกระบวนการฉีดพลาสติก
+                </div>
             </div>
         </div>
 
@@ -188,41 +255,90 @@
     </div>
 
     <script>
-        // ฐานข้อมูลวัสดุจำลองสำหรับเชื่อมโยงในระบบ
-        const database = {
-            drone: {
-                name: "คาร์บอนไฟเบอร์คอมโพสิต (Carbon Fiber Reinforced Polymer)",
-                density: "1.6 g/cm³",
-                strength: "1,600 MPa",
-                feature: "High Strength-to-Weight",
-                desc: "วัสดุคอมโพสิตที่มีน้ำหนักเบาเป็นพิเศษแต่มีความทนทานต่อแรงดึงสูงมาก ช่วยลดน้ำหนักรวมของโดรนและยืดระยะเวลาการบินให้ยาวนานขึ้น"
+        // ฐานข้อมูลวัสดุจำลองครอบคลุมหลากหลายหมวดหมู่ (โลหะ, พอลิเมอร์, เซรามิก, คอมโพสิต)
+        const materialDatabase = {
+            "แก้วน้ำ": {
+                category: "พอลิเมอร์ (Polymers) / เซรามิก (Ceramics)",
+                name: "โพลีโพรพีลีน (PP) หรือ โบโรซิลิเกตแก้ว (Borosilicate Glass)",
+                density: "0.90 - 2.23 g/cm³",
+                feature: "ทนความร้อนสูง / ปลอดภัยต่ออาหาร",
+                process: "Injection Molding / Glass Blowing",
+                desc: "หากต้องการแก้วน้ำพกพาที่ตกไม่แตก แนะนำกลุ่มพอลิเมอร์ เช่น PP แต่ถ้าต้องการความพรีเมียม ทนความร้อนสูง ไม่เป็นรอยขีดข่วน แนะนำแก้วโบโรซิลิเกต (แก้วทนไฟ) ที่มีสัมประสิทธิ์การขยายตัวต่ำ"
             },
-            heat: {
-                name: "อลูมินาเซรามิกส์ (Alumina Ceramics - Al2O3)",
-                density: "3.9 g/cm³",
-                strength: "350 MPa (Compressive)",
-                feature: "High Thermal Resistance",
-                desc: "เซรามิกเชิงวิศวกรรมที่ทนทานต่ออุณหภูมิสูงและการกัดกร่อนจากสารเคมีได้ดีเยี่ยม คงสภาพโครงสร้างได้แม้ในสภาพแวดล้อมความร้อนสูง"
+            "โดรน": {
+                category: "คอมโพสิต (Composites) & โลหะเบา (Light Alloys)",
+                name: "คาร์บอนไฟเบอร์คอมโพสิต (CFRP) และ อลูมิเนียมอัลลอยด์ 7075",
+                density: "1.60 g/cm³ (น้ำหนักเบาพิเศษ)",
+                feature: "อัตราส่วนความแข็งแรงต่อน้ำหนักสูงมาก",
+                process: "Autocure Layup / CNC Machining",
+                desc: "โครงสร้างโดรนต้องการวัสดุที่เบาแต่ไม่บิดงอ คาร์บอนไฟเบอร์ช่วยลดน้ำหนักและเพิ่มระยะเวลาบิน ส่วนจุดยึดมอเตอร์ควรใช้อลูมิเนียมอัลลอยด์เกรดอากาศยานเพื่อรองรับแรงเค้นสูง"
             },
-            corrosion: {
-                name: "สเตนเลสเกรดมารีน (Stainless Steel 316L)",
-                density: "8.0 g/cm³",
-                strength: "485 MPa",
-                feature: "Superior Corrosion Resistance",
-                desc: "โลหะผสมที่มีส่วนผสมของโครเมียม นิกเกิล และโมลิบดีนัม ช่วยสร้างฟิล์มป้องกันการกัดกร่อนจากคลอไรด์และน้ำทะเลได้อย่างมีประสิทธิภาพ"
+            "ท่อส่งน้ำ": {
+                category: "พอลิเมอร์วิศวกรรม (Engineering Polymers)",
+                name: "โพลีเอทิลีนความหนาแน่นสูง (HDPE) หรือ PVC",
+                density: "0.95 g/cm³",
+                feature: "ทนการกัดกร่อน / ยืดหยุ่นตัวดี",
+                process: "Extrusion Molding (การรีดขึ้นรูป)",
+                desc: "เหมาะสมที่สุดเพราะไม่เกิดสนิม ทนทานต่อแรงดันน้ำภายใน ทนทานต่อสภาพดินฟ้าอากาศ และมีอายุการใช้งานยาวนานในระบบสาธารณูปโภค"
+            },
+            "เครื่องยนต์": {
+                category: "โลหะผสมพิเศษ (Advanced Alloys) & เซรามิก",
+                name: "ไทเทเนียมอัลลอยด์ (Ti-6Al-4V) และ นิกเกิลซูเปอร์อัลลอยด์",
+                density: "4.43 g/cm³",
+                feature: "ทนความร้อนและความล้าสูง (High Fatigue Resistance)",
+                process: "Forging & Precision Casting",
+                desc: "ชิ้นส่วนเครื่องยนต์เผาไหม้ภายในต้องเผชิญกับอุณหภูมิและแรงกระแทกมหาศาล ไทเทเนียมและนิกเกิลซูเปอร์อัลลอยด์ช่วยคงความแข็งแรงไว้ได้แม้ในความร้อนสูงระดับหลายร้อยองศา"
+            },
+            "สมาร์ตโฟน": {
+                category: "โลหะผสม (Alloys) & เซรามิกเชิงโครงสร้าง",
+                name: "อะลูมิเนียมซีรีส์ 7000 หรือ กระจกเสริมความแข็งแกร่ง (Gorilla Glass)",
+                density: "2.70 g/cm³ (ตัวเครื่อง)",
+                feature: "ผิวสัมผัสหรูหรา / ป้องกันรอยขีดข่วน",
+                process: "CNC Anodizing & Chemical Strengthening",
+                desc: "กรอบเครื่องต้องใช้อลูมิเนียมเกรดโครงสร้างเพื่อให้แข็งแรงแต่น้ำหนักเบา และใช้เซรามิก/กระจกพิเศษทางเคมีสำหรับหน้าจอเพื่อป้องกันรอยขีดข่วนและการตกกระแทก"
             }
         };
 
-        function updateMaterial() {
-            const select = document.getElementById('applicationSelect');
-            const selectedKey = select.value;
-            const data = database[selectedKey];
+        // ค่าเริ่มต้นเมื่อโหลดหน้าเว็บ
+        let defaultKey = "แก้วน้ำ";
 
-            document.getElementById('matName').innerText = data.name;
-            document.getElementById('matDensity').innerText = data.density;
-            document.getElementById('matStrength').innerText = data.strength;
-            document.getElementById('matFeature').innerText = data.feature;
-            document.getElementById('matDesc').innerText = data.desc;
+        function quickSearch(keyword) {
+            document.getElementById('itemInput').value = keyword;
+            recommendMaterial();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                recommendMaterial();
+            }
+        }
+
+        function recommendMaterial() {
+            const inputVal = document.getElementById('itemInput').value.trim();
+            const resultBox = document.getElementById('resultCard');
+
+            // ค้นหาคำที่ใกล้เคียงในฐานข้อมูล
+            let foundKey = Object.keys(materialDatabase).find(key => inputVal.includes(key));
+
+            if (foundKey) {
+                const data = materialDatabase[foundKey];
+                document.getElementById('matCategory').innerText = "หมวดหมู่: " + data.category;
+                document.getElementById('matName').innerText = data.name;
+                document.getElementById('matDensity').innerText = data.density;
+                document.getElementById('matFeature').innerText = data.feature;
+                document.getElementById('matProcess').innerText = data.process;
+                document.getElementById('matDesc').innerHTML = `<strong>คำแนะนำจากวิศวกรรมวัสดุ (${inputVal}):</strong> ${data.desc}`;
+            } else if (inputVal !== "") {
+                // กรณีพิมพ์สิ่งของอื่นๆ ที่ไม่อยู่ในคีย์เวิร์ดหลัก ระบบจะให้คำแนะนำเชิงวิเคราะห์ทั่วไป
+                document.getElementById('matCategory').innerText = "หมวดหมู่: วิเคราะห์อเนกประสงค์ (General Engineering)";
+                document.getElementById('matName').innerText = "วัสดุผสมผสาน (Composite / Hybrid Material Selection)";
+                document.getElementById('matDensity').innerText = "แปรผันตามการออกแบบ";
+                document.getElementById('matFeature').innerText = "ปรับแต่งตามลักษณะการใช้งาน";
+                document.getElementById('matProcess').innerText = "Additive Manufacturing / Forming";
+                document.getElementById('matDesc').innerHTML = `<strong>คำแนะนำจากวิศวกรรมวัสดุสำหรับ "${inputVal}":</strong> ในการเลือกวัสดุชิ้นนี้ จำเป็นต้องวิเคราะห์ปัจจัยหลัก 4 ด้าน ได้แก่ 1) ภาระแรงที่ได้รับ (Load) 2) สภาพแวดล้อมใช้งาน (Environment) 3) กระบวนการขึ้นรูป (Processing) และ 4) ต้นทุน (Cost) เพื่อเลือกกลุ่มพอลิเมอร์ โลหะ หรือเซรามิกให้เหมาะสมที่สุด`;
+            } else {
+                alert("กรุณาระบุชื่อสิ่งของที่ต้องการสร้างครับ");
+            }
         }
     </script>
 </body>
