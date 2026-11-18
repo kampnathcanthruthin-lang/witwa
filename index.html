@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Material Recommender | Portfolio Project</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Advanced Insulated Tumbler | Materials Engineering Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #0b0f19;
             --card-bg: #131c31;
             --accent-gold: #d4af37;
+            --accent-gold-hover: #e5c158;
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --border-color: #1f293d;
+            --glow-color: rgba(212, 175, 55, 0.15);
         }
 
         * {
@@ -34,168 +36,203 @@
 
         .container {
             width: 100%;
-            max-width: 850px;
+            max-width: 1000px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .badge-top {
+            display: inline-block;
+            background-color: var(--glow-color);
+            color: var(--accent-gold);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
         header h1 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             color: var(--accent-gold);
             margin-bottom: 10px;
+            font-weight: 700;
         }
 
         header p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
-        .card {
+        /* Interactive Section Layout */
+        .engineering-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .engineering-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Component List Menu */
+        .component-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .component-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 16px 20px;
+            border-radius: 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .component-btn:hover {
+            border-color: var(--accent-gold);
+            background-color: #17233f;
+        }
+
+        .component-btn.active {
+            border-color: var(--accent-gold);
+            background-color: #17233f;
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        .component-btn .part-name {
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+
+        .component-btn .part-tag {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        /* Detail Display Card */
+        .detail-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 30px;
+            padding: 35px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .form-group {
+        .detail-header {
             margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-main);
-        }
-
-        .input-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 12px 16px;
-            background-color: #1a253f;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-main);
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-gold);
-        }
-
-        button {
-            padding: 12px 24px;
-            background-color: var(--accent-gold);
-            color: #0b0f19;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        .suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .tag {
-            background-color: #1a253f;
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .tag:hover {
-            border-color: var(--accent-gold);
-            color: var(--text-main);
-        }
-
-        .result-section {
-            margin-top: 25px;
-            border-top: 1px solid var(--border-color);
-            padding-top: 25px;
-        }
-
-        .result-badge {
-            display: inline-block;
-            background-color: rgba(212, 175, 55, 0.15);
+        .detail-title {
+            font-size: 1.6rem;
             color: var(--accent-gold);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
+            font-weight: 600;
         }
 
-        .result-title {
-            font-size: 1.4rem;
-            color: var(--text-main);
-            margin-bottom: 15px;
+        .material-sub {
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
 
-        .grid-stats {
+        /* Specs Grid Inside Detail */
+        .specs-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
 
-        .stat-box {
+        .spec-box {
             background-color: #1a253f;
             padding: 15px;
             border-radius: 8px;
             border-left: 4px solid var(--accent-gold);
         }
 
-        .stat-label {
-            font-size: 0.85rem;
+        .spec-label {
+            font-size: 0.8rem;
             color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .stat-value {
-            font-size: 1.1rem;
+        .spec-value {
+            font-size: 1.05rem;
             font-weight: 600;
             margin-top: 5px;
-            color: var(--accent-gold);
+            color: var(--text-main);
         }
 
-        .description {
-            line-height: 1.6;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            background: rgba(26, 37, 63, 0.4);
-            padding: 15px;
+        .description-box {
+            background: rgba(26, 37, 63, 0.5);
+            padding: 20px;
             border-radius: 8px;
             border: 1px dashed var(--border-color);
+            line-height: 1.7;
+            font-size: 0.95px;
+            color: var(--text-muted);
+        }
+
+        .description-box strong {
+            color: var(--text-main);
+        }
+
+        /* Tetra Tetrahedron Principle Footer banner */
+        .tetrahedron-banner {
+            background: linear-gradient(135deg, #131c31 0%, #1a253f 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .tetrahedron-banner h3 {
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .tetrahedron-banner p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         footer {
             text-align: center;
             color: var(--text-muted);
             font-size: 0.85rem;
-            margin-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            width: 100%;
         }
     </style>
 </head>
@@ -203,142 +240,153 @@
 
     <div class="container">
         <header>
-            <h1>Smart Material Selector</h1>
-            <p>ระบบผู้ช่วยวิเคราะห์และแนะนำวัสดุวิศวกรรมตามชิ้นงานที่ต้องการสร้าง</p>
+            <div class="badge-top">Materials Engineering Portfolio Project</div>
+            <h1>Advanced Insulated Tumbler Analysis</h1>
+            <p>ระบบวิเคราะห์โครงสร้าง สมบัติ และกระบวนการผลิตชิ้นส่วนวิศวกรรมวัสดุเชิงลึก แสดงความเชื่อมโยงตามหลักการ Structure - Properties - Processing - Performance</p>
         </header>
 
-        <div class="card">
-            <div class="form-group">
-                <label for="itemInput">ระบุสิ่งของหรือชิ้นงานที่คุณต้องการสร้าง:</label>
-                <div class="input-row">
-                    <input type="text" id="itemInput" placeholder="เช่น แก้วน้ำ, โครงโดรน, ใบพัดเรือ, เคสโทรศัพท์..." onkeypress="handleKeyPress(event)">
-                    <button onclick="recommendMaterial()">วิเคราะห์วัสดุ</button>
-                </div>
-                <div class="suggestions">
-                    <span style="color: var(--text-muted); font-size: 0.85rem; align-self: center;">ตัวอย่างลองค้นหา:</span>
-                    <span class="tag" onclick="quickSearch('แก้วน้ำ')">แก้วน้ำ</span>
-                    <span class="tag" onclick="quickSearch('โดรน')">โดรน</span>
-                    <span class="tag" onclick="quickSearch('ท่อส่งน้ำ')">ท่อส่งน้ำ</span>
-                    <span class="tag" onclick="quickSearch('เครื่องยนต์')">เครื่องยนต์</span>
-                    <span class="tag" onclick="quickSearch('สมาร์ตโฟน')">สมาร์ตโฟน</span>
-                </div>
+        <div class="engineering-grid">
+            <!-- Navigation Menu -->
+            <div class="component-list">
+                <button class="component-btn active" onclick="selectComponent('inner', this)">
+                    <div>
+                        <div class="part-name">1. ผนังชั้นใน (Inner Wall)</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">สัมผัสเครื่องดื่มโดยตรง</div>
+                    </div>
+                    <span class="part-tag">Metal</span>
+                </button>
+
+                <button class="component-btn" onclick="selectComponent('outer', this)">
+                    <div>
+                        <div class="part-name">2. ผนังชั้นนอก (Outer Shell)</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">โครงสร้างและรับแรงกระแทก</div>
+                    </div>
+                    <span class="part-tag">Metal</span>
+                </button>
+
+                <button class="component-btn" onclick="selectComponent('vacuum', this)">
+                    <div>
+                        <div class="part-name">3. ชั้นฉนวนสุญญากาศ</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">ตัดการถ่ายเทความร้อน</div>
+                    </div>
+                    <span class="part-tag">Thermal</span>
+                </button>
+
+                <button class="component-btn" onclick="selectComponent('lid', this)">
+                    <div>
+                        <div class="part-name">4. ฝาปิดแก้ว (Lid)</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">ใส เหนียว ปลอดภัย</div>
+                    </div>
+                    <span class="part-tag">Polymer</span>
+                </button>
+
+                <button class="component-btn" onclick="selectComponent('gasket', this)">
+                    <div>
+                        <div class="part-name">5. ขอบยางกันรั่ว (Gasket)</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">ยืดหยุ่น ปิดผนึกสนิท</div>
+                    </div>
+                    <span class="part-tag">Elastomer</span>
+                </button>
             </div>
 
-            <div class="result-section" id="resultCard">
-                <div class="result-badge" id="matCategory">หมวดหมู่: พอลิเมอร์ (Polymers)</div>
-                <div class="result-title" id="matName">โพลีโพรพีลีน (PP) / แก้วพลาสติกเกรดอาหาร</div>
-                
-                <div class="grid-stats">
-                    <div class="stat-box">
-                        <div class="stat-label">ความหนาแน่น (Density)</div>
-                        <div class="stat-value" id="matDensity">0.90 g/cm³ (น้ำหนักเบา)</div>
+            <!-- Detail Information Panel -->
+            <div class="detail-card">
+                <div>
+                    <div class="detail-header">
+                        <div class="detail-title" id="compTitle">สเตนเลสสตีลเกรดออสเทนนิติก (AISI 316L)</div>
+                        <div class="material-sub" id="compSub">องค์ประกอบหลัก: เหล็ก (Fe) ผสมโครเมียม (Cr 18%) และโมลิบดีนัม (Mo 2.5%)</div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">สมบัติเด่น (Key Property)</div>
-                        <div class="stat-value" id="matFeature">Food Safe & Durable</div>
+
+                    <div class="specs-grid">
+                        <div class="spec-box">
+                            <div class="spec-label">โครงสร้างจุลภาค (Microstructure)</div>
+                            <div class="spec-value" id="specMicro">Face-Centered Cubic (FCC)</div>
+                        </div>
+                        <div class="spec-box">
+                            <div class="spec-label">กระบวนการขึ้นรูป (Processing)</div>
+                            <div class="spec-value" id="specProcess">Deep Drawing & Spinning</div>
+                        </div>
                     </div>
-                    <div class="stat-box">
-                        <div class="stat-label">กระบวนการขึ้นรูป (Processing)</div>
-                        <div class="stat-value" id="matProcess">Injection Molding</div>
+
+                    <div class="description-box" id="compDesc">
+                        <strong>เหตุผลทางวิศวกรรมวัสดุ:</strong> มีโครงสร้างผลึกแบบ FCC ที่เหนียวสูงและไม่เปราะแตกง่าย เติมธาตุโมลิบดีนัม (Mo) เพื่อสร้างฟิล์มออกไซด์ปกป้องการกัดกร่อนจากกรดในเครื่องดื่ม (เช่น กาแฟหรือน้ำอัดลม) ปราศจากรูพรุน ปลอดภัยต่อสุขภาพ (Food Grade)
                     </div>
                 </div>
 
-                <div class="description" id="matDesc">
-                    <strong>คำแนะนำจากวิศวกรรมวัสดุ:</strong> เหมาะสำหรับทำแก้วน้ำเนื่องจากทนต่อสารเคมี ทนความร้อนระดับปานกลาง ปลอดภัยต่อการบรรจุอาหารและเครื่องดื่ม และขึ้นรูปได้ง่ายด้วยกระบวนการฉีดพลาสติก
+                <div style="margin-top: 25px; font-size: 0.85rem; color: var(--accent-gold); text-align: right;">
+                    Material Mindset Analysis System v1.0
                 </div>
             </div>
         </div>
 
+        <!-- Tetrahedron Framework Banner -->
+        <div class="tetrahedron-banner">
+            <h3>Material Tetrahedron Concept</h3>
+            <p>โปรเจกต์นี้สะท้อนความเข้าใจในวัฏจักรของวัสดุ ตั้งแต่การออกแบบโครงสร้างจุลภาค ควบคุมสมบัติเชิงกล เลือกกระบวนการขึ้นรูปที่เหมาะสม จนเกิดเป็นสมรรถนะการใช้งานจริงที่ตอบโจทย์อุตสาหกรรมยุคใหม่</p>
+        </div>
+
         <footer>
-            Portfolio Project — นายกัมปนาท จันทรุทิน | คณะวิศวกรรมวัสดุ
+            Portfolio Project — นายกัมปนาท จันทรุทิน | คณะวิศวกรรมวัสดุ (ม.6/8)
         </footer>
     </div>
 
     <script>
-        // ฐานข้อมูลวัสดุจำลองครอบคลุมหลากหลายหมวดหมู่ (โลหะ, พอลิเมอร์, เซรามิก, คอมโพสิต)
-        const materialDatabase = {
-            "แก้วน้ำ": {
-                category: "พอลิเมอร์ (Polymers) / เซรามิก (Ceramics)",
-                name: "โพลีโพรพีลีน (PP) หรือ โบโรซิลิเกตแก้ว (Borosilicate Glass)",
-                density: "0.90 - 2.23 g/cm³",
-                feature: "ทนความร้อนสูง / ปลอดภัยต่ออาหาร",
-                process: "Injection Molding / Glass Blowing",
-                desc: "หากต้องการแก้วน้ำพกพาที่ตกไม่แตก แนะนำกลุ่มพอลิเมอร์ เช่น PP แต่ถ้าต้องการความพรีเมียม ทนความร้อนสูง ไม่เป็นรอยขีดข่วน แนะนำแก้วโบโรซิลิเกต (แก้วทนไฟ) ที่มีสัมประสิทธิ์การขยายตัวต่ำ"
+        // ฐานข้อมูลรายละเอียดชิ้นส่วนแก้วเก็บความเย็นแบบเจาะลึก
+        const tumblerDatabase = {
+            inner: {
+                title: "สเตนเลสสตีลเกรดออสเทนนิติก (AISI 316L)",
+                sub: "องค์ประกอบหลัก: เหล็ก (Fe) ผสมโครเมียม (Cr 16-18%), นิกเกิล (Ni 10-14%) และโมลิบดีนัม (Mo 2-3%)",
+                micro: "Face-Centered Cubic (FCC)",
+                process: "Deep Drawing (การขึ้นรูปลึก)",
+                desc: "<strong>เหตุผลทางวิศวกรรมวัสดุ:</strong> มีโครงสร้างผลึกแบบ FCC ที่เหนียวสูง การเติมโมลิบดีนัมช่วยต้านทานการกัดกร่อนจากกรดในเครื่องดื่มได้ดีเยี่ยม ผิวเรียบเนียนไร้รูพรุน ป้องกันการสะสมของแบคทีเรีย"
             },
-            "โดรน": {
-                category: "คอมโพสิต (Composites) & โลหะเบา (Light Alloys)",
-                name: "คาร์บอนไฟเบอร์คอมโพสิต (CFRP) และ อลูมิเนียมอัลลอยด์ 7075",
-                density: "1.60 g/cm³ (น้ำหนักเบาพิเศษ)",
-                feature: "อัตราส่วนความแข็งแรงต่อน้ำหนักสูงมาก",
-                process: "Autocure Layup / CNC Machining",
-                desc: "โครงสร้างโดรนต้องการวัสดุที่เบาแต่ไม่บิดงอ คาร์บอนไฟเบอร์ช่วยลดน้ำหนักและเพิ่มระยะเวลาบิน ส่วนจุดยึดมอเตอร์ควรใช้อลูมิเนียมอัลลอยด์เกรดอากาศยานเพื่อรองรับแรงเค้นสูง"
+            outer: {
+                title: "สเตนเลสสตีล (AISI 304 / 18-8 Stainless Steel)",
+                sub: "องค์ประกอบหลัก: โลหะผสมเหล็กที่มีโครเมียม 18% และนิกเกิล 8%",
+                micro: "Austenitic FCC Structure",
+                process: "Spinning & Press Forming",
+                desc: "<strong>เหตุผลทางวิศวกรรมวัสดุ:</strong> ให้ความต้านทานแรงดึงสูง (Tensile Strength ~515 MPa) ทนทานต่อแรงกระแทกในชีวิตประจำวัน ไม่บุบสลายง่าย และขึ้นรูปผิวภายนอก (Powder Coating) ได้สวยงาม"
             },
-            "ท่อส่งน้ำ": {
-                category: "พอลิเมอร์วิศวกรรม (Engineering Polymers)",
-                name: "โพลีเอทิลีนความหนาแน่นสูง (HDPE) หรือ PVC",
-                density: "0.95 g/cm³",
-                feature: "ทนการกัดกร่อน / ยืดหยุ่นตัวดี",
-                process: "Extrusion Molding (การรีดขึ้นรูป)",
-                desc: "เหมาะสมที่สุดเพราะไม่เกิดสนิม ทนทานต่อแรงดันน้ำภายใน ทนทานต่อสภาพดินฟ้าอากาศ และมีอายุการใช้งานยาวนานในระบบสาธารณูปโภค"
+            vacuum: {
+                title: "ฉนวนสุญญากาศ (Vacuum Insulation Layer)",
+                sub: "ระบบช่องว่างอากาศถูกดูดออกจนความดันต่ำกว่า 0.01 Pa ระหว่างผนังสองชั้น",
+                micro: "Molecular Void / Zero Convection",
+                process: "Vacuum Brazing & Sealing",
+                desc: "<strong>เหตุผลทางวิศวกรรมวัสดุ:</strong> ตัดกลไกการถ่ายเทความร้อนแบบ 'การนำความร้อน' (Conduction) และ 'การพาความร้อน' (Convection) ออกเกือบ 100% เนื่องจากไม่มีโมเลกุลอากาศเป็นตัวกลางส่งผ่านความร้อน"
             },
-            "เครื่องยนต์": {
-                category: "โลหะผสมพิเศษ (Advanced Alloys) & เซรามิก",
-                name: "ไทเทเนียมอัลลอยด์ (Ti-6Al-4V) และ นิกเกิลซูเปอร์อัลลอยด์",
-                density: "4.43 g/cm³",
-                feature: "ทนความร้อนและความล้าสูง (High Fatigue Resistance)",
-                process: "Forging & Precision Casting",
-                desc: "ชิ้นส่วนเครื่องยนต์เผาไหม้ภายในต้องเผชิญกับอุณหภูมิและแรงกระแทกมหาศาล ไทเทเนียมและนิกเกิลซูเปอร์อัลลอยด์ช่วยคงความแข็งแรงไว้ได้แม้ในความร้อนสูงระดับหลายร้อยองศา"
+            lid: {
+                title: "พอลิเมอร์วิศวกรรม โคโพลีเอสเตอร์ (Tritan Copolyester)",
+                sub: "พอลิเมอร์ประเภทอสัณฐาน (Amorphous Polymer) ปราศจากสาร BPA (BPA-Free)",
+                micro: "Amorphous Polymer Chains",
+                process: "Injection Molding (การฉีดขึ้นรูป)",
+                desc: "<strong>เหตุผลทางวิศวกรรมวัสดุ:</strong> มีความใสเหมือนแก้วแต่เหนียวและทนทานต่อแรงกระแทกสูง ทนต่อสารเคมีและไขมันจากเครื่องดื่ม ไม่แตกหักง่ายเมื่อตกกระแทกพื้น"
             },
-            "สมาร์ตโฟน": {
-                category: "โลหะผสม (Alloys) & เซรามิกเชิงโครงสร้าง",
-                name: "อะลูมิเนียมซีรีส์ 7000 หรือ กระจกเสริมความแข็งแกร่ง (Gorilla Glass)",
-                density: "2.70 g/cm³ (ตัวเครื่อง)",
-                feature: "ผิวสัมผัสหรูหรา / ป้องกันรอยขีดข่วน",
-                process: "CNC Anodizing & Chemical Strengthening",
-                desc: "กรอบเครื่องต้องใช้อลูมิเนียมเกรดโครงสร้างเพื่อให้แข็งแรงแต่น้ำหนักเบา และใช้เซรามิก/กระจกพิเศษทางเคมีสำหรับหน้าจอเพื่อป้องกันรอยขีดข่วนและการตกกระแทก"
+            gasket: {
+                title: "ยางซิลิโคนเกรดอาหาร (Food-Grade Silicone Elastomer)",
+                sub: "ยางสังเคราะห์ที่มีโครงสร้างสายโซ่หลักเป็นซิลิคอนและออกซิเจน (Si-O)",
+                micro: "Cross-linked Elastomer Network",
+                process: "Compression Molding (การอัดขึ้นรูปความร้อน)",
+                desc: "<strong>เหตุผลทางวิศวกรรมวัสดุ:</strong> มีความยืดหยุ่นสูงในช่วงอุณหภูมิกว้าง คืนตัวได้ดีเยี่ยม (Low Compression Set) ทำให้ปิดผนึกสนิทระหว่างฝาและตัวแก้ว ป้องกันน้ำรั่วซึมได้อย่างสมบูรณ์แบบ"
             }
         };
 
-        // ค่าเริ่มต้นเมื่อโหลดหน้าเว็บ
-        let defaultKey = "แก้วน้ำ";
+        function selectComponent(partKey, buttonElement) {
+            // ลบ class active จากปุ่มทั้งหมด
+            const buttons = document.querySelectorAll('.component-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
 
-        function quickSearch(keyword) {
-            document.getElementById('itemInput').value = keyword;
-            recommendMaterial();
-        }
+            // เพิ่ม class active ให้ปุ่มที่ถูกคลิก
+            buttonElement.classList.add('active');
 
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                recommendMaterial();
-            }
-        }
+            // ดึงข้อมูลตาม key
+            const data = tumblerDatabase[partKey];
 
-        function recommendMaterial() {
-            const inputVal = document.getElementById('itemInput').value.trim();
-            const resultBox = document.getElementById('resultCard');
-
-            // ค้นหาคำที่ใกล้เคียงในฐานข้อมูล
-            let foundKey = Object.keys(materialDatabase).find(key => inputVal.includes(key));
-
-            if (foundKey) {
-                const data = materialDatabase[foundKey];
-                document.getElementById('matCategory').innerText = "หมวดหมู่: " + data.category;
-                document.getElementById('matName').innerText = data.name;
-                document.getElementById('matDensity').innerText = data.density;
-                document.getElementById('matFeature').innerText = data.feature;
-                document.getElementById('matProcess').innerText = data.process;
-                document.getElementById('matDesc').innerHTML = `<strong>คำแนะนำจากวิศวกรรมวัสดุ (${inputVal}):</strong> ${data.desc}`;
-            } else if (inputVal !== "") {
-                // กรณีพิมพ์สิ่งของอื่นๆ ที่ไม่อยู่ในคีย์เวิร์ดหลัก ระบบจะให้คำแนะนำเชิงวิเคราะห์ทั่วไป
-                document.getElementById('matCategory').innerText = "หมวดหมู่: วิเคราะห์อเนกประสงค์ (General Engineering)";
-                document.getElementById('matName').innerText = "วัสดุผสมผสาน (Composite / Hybrid Material Selection)";
-                document.getElementById('matDensity').innerText = "แปรผันตามการออกแบบ";
-                document.getElementById('matFeature').innerText = "ปรับแต่งตามลักษณะการใช้งาน";
-                document.getElementById('matProcess').innerText = "Additive Manufacturing / Forming";
-                document.getElementById('matDesc').innerHTML = `<strong>คำแนะนำจากวิศวกรรมวัสดุสำหรับ "${inputVal}":</strong> ในการเลือกวัสดุชิ้นนี้ จำเป็นต้องวิเคราะห์ปัจจัยหลัก 4 ด้าน ได้แก่ 1) ภาระแรงที่ได้รับ (Load) 2) สภาพแวดล้อมใช้งาน (Environment) 3) กระบวนการขึ้นรูป (Processing) และ 4) ต้นทุน (Cost) เพื่อเลือกกลุ่มพอลิเมอร์ โลหะ หรือเซรามิกให้เหมาะสมที่สุด`;
-            } else {
-                alert("กรุณาระบุชื่อสิ่งของที่ต้องการสร้างครับ");
-            }
+            // อัปเดตข้อมูลบนหน้าจอ
+            document.getElementById('compTitle').innerText = data.title;
+            document.getElementById('compSub').innerText = data.sub;
+            document.getElementById('specMicro').innerText = data.micro;
+            document.getElementById('specProcess').innerText = data.process;
+            document.getElementById('compDesc').innerHTML = data.desc;
         }
     </script>
 </body>
